@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Регистрация | HappySvinBot</title>
+<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@400;700;900&family=Manrope:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --purple: #9146ff;
+  --purple-dark: #6b2fc0;
+  --purple-dim: #1a0a2e;
+  --purple-glow: rgba(145,70,255,0.18);
+  --bg: #0a0a0f;
+  --surface: #111118;
+  --surface2: #18181f;
+  --border: rgba(145,70,255,0.2);
+  --text: #f0eeff;
+  --muted: #8a82a8;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Manrope', sans-serif;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* Сетка на фоне */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(145,70,255,0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(145,70,255,0.04) 1px, transparent 1px);
+  background-size: 48px 48px;
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* Свечение сверху */
+body::after {
+  content: '';
+  position: fixed;
+  top: -200px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 800px;
+  height: 500px;
+  background: radial-gradient(ellipse, rgba(145,70,255,0.15) 0%, transparent 70%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* NAV */
+nav {
+  position: relative;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 24px 48px;
+  border-bottom: 1px solid var(--border);
+}
+
+.nav-logo {
+  font-family: 'Unbounded', sans-serif;
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--purple);
+  letter-spacing: -0.5px;
+  text-decoration: none;
+  transition: opacity 0.2s;
+}
+
+.nav-logo:hover {
+  opacity: 0.8;
+}
+
+.nav-links {
+  display: flex;
+  gap: 32px;
+  list-style: none;
+  align-items: center;
+}
+
+.nav-links a {
+  color: var(--muted);
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 500;
+  transition: color 0.2s;
+}
+
+.nav-links a:hover { color: var(--text); }
+
+/* Registration Container */
+.register-container {
+  position: relative;
+  z-index: 1;
+  max-width: 480px;
+  margin: 80px auto;
+  padding: 0 24px;
+}
+
+.register-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  padding: 48px;
+  position: relative;
+  overflow: hidden;
+}
+
+.register-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--purple), transparent);
+  opacity: 0.6;
+}
+
+.register-header {
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+.register-icon {
+  width: 60px;
+  height: 60px;
+  border-radius: 16px;
+  background: rgba(145,70,255,0.12);
+  border: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 20px;
+  font-size: 28px;
+}
+
+.register-title {
+  font-family: 'Unbounded', sans-serif;
+  font-size: 28px;
+  font-weight: 700;
+  letter-spacing: -1px;
+  margin-bottom: 12px;
+}
+
+.register-subtitle {
+  font-size: 14px;
+  color: var(--muted);
+  line-height: 1.5;
+}
+
+/* Form */
+.form-group {
+  margin-bottom: 24px;
+}
+
+.form-label {
+  display: block;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 8px;
+  letter-spacing: 0.3px;
+}
+
+.form-input {
+  width: 100%;
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 14px 16px;
+  font-family: 'Manrope', sans-serif;
+  font-size: 14px;
+  color: var(--text);
+  transition: border-color 0.2s, background 0.2s;
+  outline: none;
+}
+
+.form-input:focus {
+  border-color: var(--purple);
+  background: var(--bg);
+}
+
+.form-input::placeholder {
+  color: var(--muted);
+  opacity: 0.5;
+}
+
+.form-checkbox-group {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  margin-bottom: 28px;
+}
+
+.form-checkbox {
+  width: 20px;
+  height: 20px;
+  border-radius: 6px;
+  border: 1px solid var(--border);
+  background: var(--surface2);
+  cursor: pointer;
+  flex-shrink: 0;
+  margin-top: 2px;
+  accent-color: var(--purple);
+}
+
+.form-checkbox-label {
+  font-size: 13px;
+  color: var(--muted);
+  line-height: 1.5;
+  cursor: pointer;
+}
+
+.form-checkbox-label a {
+  color: var(--purple);
+  text-decoration: none;
+  transition: opacity 0.2s;
+}
+
+.form-checkbox-label a:hover {
+  opacity: 0.8;
+}
+
+.btn-submit {
+  width: 100%;
+  background: var(--purple);
+  color: white;
+  font-family: 'Manrope', sans-serif;
+  font-size: 15px;
+  font-weight: 700;
+  padding: 16px;
+  border-radius: 12px;
+  border: none;
+  cursor: pointer;
+  transition: background 0.2s, transform 0.15s;
+}
+
+.btn-submit:hover {
+  background: var(--purple-dark);
+  transform: translateY(-1px);
+}
+
+.btn-submit:active {
+  transform: translateY(0);
+}
+
+.register-divider {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin: 28px 0;
+}
+
+.register-divider-line {
+  flex: 1;
+  height: 1px;
+  background: var(--border);
+}
+
+.register-divider-text {
+  font-size: 12px;
+  color: var(--muted);
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.btn-twitch {
+  width: 100%;
+  background: transparent;
+  border: 1px solid var(--border);
+  color: var(--text);
+  font-family: 'Manrope', sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  padding: 14px;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: border-color 0.2s, background 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  text-decoration: none;
+}
+
+.btn-twitch:hover {
+  border-color: rgba(145,70,255,0.5);
+  background: var(--surface2);
+}
+
+.register-footer {
+  text-align: center;
+  margin-top: 28px;
+  font-size: 13px;
+  color: var(--muted);
+}
+
+.register-footer a {
+  color: var(--purple);
+  text-decoration: none;
+  font-weight: 600;
+  transition: opacity 0.2s;
+}
+
+.register-footer a:hover {
+  opacity: 0.8;
+}
+
+/* Анимация появления */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(24px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.register-card {
+  animation: fadeUp 0.6s ease both;
+}
+
+@media (max-width: 720px) {
+  nav { padding: 20px 24px; }
+  .register-container { margin: 40px auto; }
+  .register-card { padding: 32px 24px; }
+  .register-title { font-size: 24px; }
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="index.html" class="nav-logo">HappySvinBot</a>
+  <ul class="nav-links">
+    <li><a href="index.html#features">Возможности</a></li>
+    <li><a href="index.html#socials">Контакты</a></li>
+  </ul>
+</nav>
+
+<div class="register-container">
+  <div class="register-card">
+    <div class="register-header">
+      <div class="register-icon">🤖</div>
+      <h1 class="register-title">Регистрация</h1>
+      <p class="register-subtitle">Создайте аккаунт для управления вашим Twitch ботом</p>
+    </div>
+
+    <form id="registerForm">
+      <div class="form-group">
+        <label class="form-label" for="username">Имя пользователя</label>
+        <input 
+          type="text" 
+          id="username" 
+          class="form-input" 
+          placeholder="Введите имя пользователя"
+          required
+        >
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" for="email">Email</label>
+        <input 
+          type="email" 
+          id="email" 
+          class="form-input" 
+          placeholder="your@email.com"
+          required
+        >
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" for="password">Пароль</label>
+        <input 
+          type="password" 
+          id="password" 
+          class="form-input" 
+          placeholder="Минимум 8 символов"
+          required
+        >
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" for="confirmPassword">Подтвердите пароль</label>
+        <input 
+          type="password" 
+          id="confirmPassword" 
+          class="form-input" 
+          placeholder="Повторите пароль"
+          required
+        >
+      </div>
+
+      <div class="form-checkbox-group">
+        <input 
+          type="checkbox" 
+          id="terms" 
+          class="form-checkbox"
+          required
+        >
+        <label class="form-checkbox-label" for="terms">
+          Я принимаю <a href="#">условия использования</a> и <a href="#">политику конфиденциальности</a>
+        </label>
+      </div>
+
+      <button type="submit" class="btn-submit">
+        Зарегистрироваться
+      </button>
+    </form>
+
+    <div class="register-divider">
+      <div class="register-divider-line"></div>
+      <span class="register-divider-text">или</span>
+      <div class="register-divider-line"></div>
+    </div>
+
+    <a href="#" class="btn-twitch">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+        <path d="M11.571 4.714h1.715v5.143H11.57zm4.715 0H18v5.143h-1.714zM6 0L1.714 4.286v15.428h5.143V24l4.286-4.286h3.428L22.286 12V0zm14.571 11.143l-3.428 3.428h-3.429l-3 3v-3H6.857V1.714h13.714z"/>
+      </svg>
+      Войти через Twitch
+    </a>
+
+    <div class="register-footer">
+      Уже есть аккаунт? <a href="#">Войти</a>
+    </div>
+  </div>
+</div>
+
+<script>
+document.getElementById('registerForm').addEventListener('submit', function(e) {
+  e.preventDefault();
+  
+  const password = document.getElementById('password').value;
+  const confirmPassword = document.getElementById('confirmPassword').value;
+  
+  if (password !== confirmPassword) {
+    alert('Пароли не совпадают!');
+    return;
+  }
+  
+  if (password.length < 8) {
+    alert('Пароль должен содержать минимум 8 символов!');
+    return;
+  }
+  
+  // Здесь будет логика отправки данных на сервер
+  alert('Регистрация успешна! (В реальном приложении данные будут отправлены на сервер)');
+});
+</script>
+
+</body>
+</html>

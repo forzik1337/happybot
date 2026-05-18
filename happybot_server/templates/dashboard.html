@@ -1,0 +1,633 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>HappySvinBot</title>
+<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@400;700;900&family=Manrope:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --purple: #9146ff;
+  --purple-dark: #6b2fc0;
+  --purple-dim: #1a0a2e;
+  --purple-glow: rgba(145,70,255,0.18);
+  --bg: #0a0a0f;
+  --surface: #111118;
+  --surface2: #18181f;
+  --border: rgba(145,70,255,0.2);
+  --text: #f0eeff;
+  --muted: #8a82a8;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Manrope', sans-serif;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* Сетка на фоне */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(145,70,255,0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(145,70,255,0.04) 1px, transparent 1px);
+  background-size: 48px 48px;
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* Свечение сверху */
+body::after {
+  content: '';
+  position: fixed;
+  top: -200px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 800px;
+  height: 500px;
+  background: radial-gradient(ellipse, rgba(145,70,255,0.15) 0%, transparent 70%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+.container {
+  position: relative;
+  z-index: 1;
+  max-width: 860px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+/* NAV */
+nav {
+  position: relative;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 24px 48px;
+  border-bottom: 1px solid var(--border);
+}
+
+.nav-logo {
+  font-family: 'Unbounded', sans-serif;
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--purple);
+  letter-spacing: -0.5px;
+}
+
+.nav-links {
+  display: flex;
+  gap: 32px;
+  list-style: none;
+}
+
+.nav-links a {
+  color: var(--muted);
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 500;
+  transition: color 0.2s;
+}
+
+.nav-links a:hover { color: var(--text); }
+
+.nav-right {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.nav-register-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--purple);
+  color: white;
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 700;
+  padding: 12px 22px;
+  border-radius: 12px;
+  transition: background 0.2s, transform 0.15s;
+}
+
+.nav-register-btn:hover {
+  background: var(--purple-dark);
+  transform: translateY(-1px);
+}
+
+/* HERO */
+.hero {
+  padding: 100px 48px 80px;
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 60px;
+  align-items: center;
+}
+
+.hero-left { max-width: 520px; }
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(145,70,255,0.12);
+  border: 1px solid var(--border);
+  border-radius: 100px;
+  padding: 6px 14px;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--purple);
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  margin-bottom: 28px;
+}
+
+.badge-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--purple);
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.5; transform: scale(0.8); }
+}
+
+h1 {
+  font-family: 'Unbounded', sans-serif;
+  font-size: 54px;
+  font-weight: 900;
+  line-height: 1.05;
+  letter-spacing: -2px;
+  margin-bottom: 24px;
+}
+
+h1 span {
+  color: var(--purple);
+}
+
+.hero-desc {
+  font-size: 17px;
+  line-height: 1.7;
+  color: var(--muted);
+  margin-bottom: 40px;
+  max-width: 440px;
+}
+
+.btn-group {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.btn-primary {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  background: var(--purple);
+  color: white;
+  text-decoration: none;
+  font-family: 'Manrope', sans-serif;
+  font-size: 15px;
+  font-weight: 700;
+  padding: 14px 28px;
+  border-radius: 12px;
+  transition: background 0.2s, transform 0.15s;
+}
+
+.btn-primary:hover {
+  background: var(--purple-dark);
+  transform: translateY(-1px);
+}
+
+.btn-secondary {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  background: transparent;
+  color: var(--muted);
+  text-decoration: none;
+  font-family: 'Manrope', sans-serif;
+  font-size: 15px;
+  font-weight: 600;
+  padding: 14px 28px;
+  border-radius: 12px;
+  border: 1px solid var(--border);
+  transition: color 0.2s, border-color 0.2s, transform 0.15s;
+}
+
+.btn-secondary:hover {
+  color: var(--text);
+  border-color: rgba(145,70,255,0.5);
+  transform: translateY(-1px);
+}
+
+/* ЛОГОТИП */
+.logo-wrap {
+  position: relative;
+  width: 200px;
+  height: 200px;
+  flex-shrink: 0;
+}
+
+.logo-ring {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  border: 1px solid var(--border);
+  animation: spin 20s linear infinite;
+}
+
+.logo-ring::before {
+  content: '';
+  position: absolute;
+  top: -3px;
+  left: 50%;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--purple);
+  transform: translateX(-50%);
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.logo-inner {
+  position: absolute;
+  inset: 20px;
+  border-radius: 50%;
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.logo-placeholder {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  color: var(--muted);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.5px;
+}
+
+.logo-placeholder svg {
+  width: 36px;
+  height: 36px;
+  opacity: 0.4;
+}
+
+/* SECTION: Возможности */
+.section {
+  padding: 80px 48px;
+  border-top: 1px solid var(--border);
+}
+
+.section-label {
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--purple);
+  margin-bottom: 16px;
+}
+
+.section-title {
+  font-family: 'Unbounded', sans-serif;
+  font-size: 32px;
+  font-weight: 700;
+  letter-spacing: -1px;
+  margin-bottom: 48px;
+}
+
+.features-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+}
+
+.feature-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 28px 24px;
+  transition: border-color 0.2s, transform 0.2s;
+  position: relative;
+  overflow: hidden;
+}
+
+.feature-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--purple), transparent);
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+.feature-card:hover {
+  border-color: rgba(145,70,255,0.4);
+  transform: translateY(-2px);
+}
+
+.feature-card:hover::before { opacity: 1; }
+
+.feature-icon {
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  background: rgba(145,70,255,0.12);
+  border: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 18px;
+  font-size: 20px;
+}
+
+.feature-title {
+  font-family: 'Unbounded', sans-serif;
+  font-size: 14px;
+  font-weight: 700;
+  margin-bottom: 10px;
+  letter-spacing: -0.3px;
+}
+
+.feature-desc {
+  font-size: 13px;
+  line-height: 1.6;
+  color: var(--muted);
+}
+
+/* SOCIALS */
+.socials-section {
+  padding: 80px 48px;
+  border-top: 1px solid var(--border);
+}
+
+.socials-grid {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.social-card {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 14px 20px;
+  text-decoration: none;
+  color: var(--text);
+  font-size: 14px;
+  font-weight: 600;
+  transition: border-color 0.2s, transform 0.15s, background 0.2s;
+  min-width: 160px;
+}
+
+.social-card:hover {
+  border-color: rgba(145,70,255,0.5);
+  background: var(--surface2);
+  transform: translateY(-1px);
+}
+
+.social-card .social-icon {
+  width: 36px;
+  height: 36px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  flex-shrink: 0;
+}
+
+.social-card .social-name { color: var(--muted); font-size: 12px; font-weight: 500; }
+
+/* FOOTER */
+footer {
+  border-top: 1px solid var(--border);
+  padding: 32px 48px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.footer-logo {
+  font-family: 'Unbounded', sans-serif;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--purple);
+}
+
+.footer-copy {
+  font-size: 13px;
+  color: var(--muted);
+}
+
+/* Анимация появления */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(24px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.hero-left > * {
+  animation: fadeUp 0.6s ease both;
+}
+
+.badge { animation-delay: 0.0s; }
+h1 { animation-delay: 0.1s; }
+.hero-desc { animation-delay: 0.2s; }
+.btn-group { animation-delay: 0.3s; }
+.logo-wrap { animation: fadeUp 0.6s ease 0.2s both; }
+
+@media (max-width: 720px) {
+  nav { padding: 20px 24px; }
+  .hero { grid-template-columns: 1fr; padding: 60px 24px 40px; }
+  .logo-wrap { display: none; }
+  h1 { font-size: 36px; }
+  .features-grid { grid-template-columns: 1fr; }
+  .section { padding: 60px 24px; }
+  .socials-section { padding: 60px 24px; }
+  footer { padding: 24px; flex-direction: column; gap: 8px; text-align: center; }
+.nav-right {
+  gap: 10px;
+}
+
+.nav-register-btn {
+  padding: 10px 16px;
+  font-size: 13px;
+}
+
+.nav-links {
+  gap: 16px;
+}
+
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-logo">HappySvinBot</div>
+  <ul class="nav-links">
+    <li><a href="#features">Возможности</a></li>
+    <li><a href="#socials">Контакты</a></li>
+    <!-- <li><a href="#">Подключить</a></li> -->
+  </ul>
+  <a href="#" class="nav-register-btn">Регистрация</a>
+</nav>
+
+<div class="hero">
+  <div class="hero-left">
+    <div class="badge">
+      <span class="badge-dot"></span>
+      Twitch бот
+    </div>
+    <h1>Happy<span>Svin</span>Bot</h1>
+    <p class="hero-desc">
+      Умный бот для Twitch-стримов — автосообщения, управление категорией и названием канала прямо из чата, и многое другое.
+    </p>
+    <div class="btn-group">
+      <a href="#" class="btn-primary">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M19 8v6M22 11h-6"/></svg>
+        Регистрация
+      </a>
+      <a href="#features" class="btn-secondary">
+        Возможности →
+      </a>
+    </div>
+  </div>
+
+  <div class="logo-wrap">
+    <div class="logo-ring"></div>
+    <div class="logo-inner">
+      <div class="logo-placeholder">
+        <!-- Замени это на тег <img src="логотип.png"> -->
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+          <rect x="3" y="3" width="18" height="18" rx="4"/>
+          <path d="M8 12h8M12 8v8"/>
+        </svg>
+        ЛОГОТИП
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="section" id="features">
+  <div class="section-label">Что умеет</div>
+  <div class="section-title">Возможности бота</div>
+  <div class="features-grid">
+    <div class="feature-card">
+      <div class="feature-icon">🎮</div>
+      <div class="feature-title">Смена категории</div>
+      <div class="feature-desc">Команда !game — быстрая смена игры на канале прямо из чата.</div>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">✏️</div>
+      <div class="feature-title">Смена названия</div>
+      <div class="feature-desc">Команда !title — обновить заголовок стрима в одно сообщение.</div>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">⏱️</div>
+      <div class="feature-title">Автосообщения</div>
+      <div class="feature-desc">Периодические напоминания о Telegram-канале, донатах и соцсетях.</div>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">📢</div>
+      <div class="feature-title">Быстрые команды</div>
+      <div class="feature-desc">!tg, !donate, !tt — мгновенные ответы на популярные вопросы чата.</div>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">🎲</div>
+      <div class="feature-title">Ставки</div>
+      <div class="feature-desc">Запуск ставок через панель управления одной кнопкой.</div>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">⚙️</div>
+      <div class="feature-title">Веб-панель</div>
+      <div class="feature-desc">Удобная панель управления ботом прямо в браузере без перезапуска.</div>
+    </div>
+  </div>
+</div>
+
+<div class="socials-section" id="socials">
+  <div class="section-label">Контакты</div>
+  <div class="section-title">Найти меня</div>
+  <div class="socials-grid">
+
+    <a href="https://twitch.tv/ТВОЙ_НИК" class="social-card">
+      <div class="social-icon" style="background:rgba(145,70,255,0.15);">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="#9146ff"><path d="M11.571 4.714h1.715v5.143H11.57zm4.715 0H18v5.143h-1.714zM6 0L1.714 4.286v15.428h5.143V24l4.286-4.286h3.428L22.286 12V0zm14.571 11.143l-3.428 3.428h-3.429l-3 3v-3H6.857V1.714h13.714z"/></svg>
+      </div>
+      <div>
+        <div>Twitch</div>
+        <div class="social-name">ТВОЙ_НИК</div>
+      </div>
+    </a>
+
+    <a href="https://t.me/ТВОЙ_КАНАЛ" class="social-card">
+      <div class="social-icon" style="background:rgba(0,136,204,0.15);">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="#0088cc"><path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.562 8.248-1.97 9.289c-.145.658-.537.818-1.084.508l-3-2.21-1.447 1.394c-.16.16-.295.295-.605.295l.213-3.053 5.56-5.023c.242-.213-.054-.333-.373-.12L7.125 14.51l-2.96-.924c-.643-.204-.657-.643.136-.953l11.57-4.461c.537-.194 1.006.131.691.076z"/></svg>
+      </div>
+      <div>
+        <div>Telegram</div>
+        <div class="social-name">ТВОЙ_КАНАЛ</div>
+      </div>
+    </a>
+
+    <a href="https://tiktok.com/@ТВОЙ_НИК" class="social-card">
+      <div class="social-icon" style="background:rgba(255,255,255,0.06);">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="#fff"><path d="M19.59 6.69a4.83 4.83 0 01-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 01-2.88 2.5 2.89 2.89 0 01-2.89-2.89 2.89 2.89 0 012.89-2.89c.28 0 .54.04.79.1V9.01a6.33 6.33 0 00-.79-.05 6.34 6.34 0 00-6.34 6.34 6.34 6.34 0 006.34 6.34 6.34 6.34 0 006.33-6.34V8.69a8.18 8.18 0 004.78 1.52V6.76a4.85 4.85 0 01-1.01-.07z"/></svg>
+      </div>
+      <div>
+        <div>TikTok</div>
+        <div class="social-name">ТВОЙ_НИК</div>
+      </div>
+    </a>
+
+    <a href="https://youtube.com/@ТВОЙ_КАНАЛ" class="social-card">
+      <div class="social-icon" style="background:rgba(255,0,0,0.1);">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="#ff0000"><path d="M23.498 6.186a3.016 3.016 0 00-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 00.502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 002.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 002.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
+      </div>
+      <div>
+        <div>YouTube</div>
+        <div class="social-name">ТВОЙ_КАНАЛ</div>
+      </div>
+    </a>
+
+  </div>
+</div>
+
+<footer>
+  <div class="footer-logo">HappySvinBot</div>
+  <div class="footer-copy">Сделано с 💜 для Twitch</div>
+</footer>
+
+</body>
+</html>
